@@ -20,5 +20,6 @@ while(True):
     sh.sendline(payload)
     answer = sh.recvall()
     if("pico" in answer):
+        print "Canary = " + canary
         print answer
         break

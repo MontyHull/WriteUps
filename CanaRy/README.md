@@ -119,3 +119,15 @@ Which means that there is 0x30 or 48 bytes before the ebp, so we will need to wr
 ### The exploit
 
 Once we know the address of the flag function, our canary, and how far away from the return address we are, all we need to do is to start the process in a loop and continously try to land our return at the right place in order to print the flag. I have written a python script "solution.py" that will find the canary and then use it to get to the display_flag() function and win. 
+
+If we run this script we get:
+```
+...
+[+] Starting local process './vuln': pid 2712213
+[+] Receiving all data: Done (118B)
+[*] Process './vuln' stopped with exit code -11 (SIGSEGV) (pid 2712213)
+Canary = lV!)
+Please enter the length of the entry:
+> Input> Ok... Now Where's the Flag?
+picoCTF{the flag}
+```
