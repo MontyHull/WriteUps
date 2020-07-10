@@ -11,7 +11,7 @@ This time we added a canary to detect buffer overflows. Can you still find a way
 
 ### Initial exploration
 
-For this challenge we are given the source code, the compiled binary, and a directory on their server where we can run the code to actually get the flag. The first thing that should jump out is that the name of the challenge is CanaRy so I am going to assume that we will be trying to bypass some for of stack canary in order to win this. 
+For this challenge we are given the source code, the compiled binary, and a directory on their server where we can run the code to actually get the flag. The first thing that should jump out is that the name of the challenge is CanaRy so I am going to assume that we will be trying to bypass some form of stack canary in order to win this. 
 
 We can start with our usual security check:
 ```
@@ -23,7 +23,7 @@ NX:       NX enabled
 PIE:      PIE enabled
 ```
 
-So, oddly enough, the only traditional protection turned off is stack canaries. So we can't just throw shellcode on the stack, and trying to jump to other functions may be a little more difficult.
+So, oddly enough, the only traditional protection turned off is stack canaries. So we can't just throw shellcode on the stack since NX is enabled, and trying to jump to other functions may be a little more difficult thanks to RELRO and PIE.
 
 If we run the binary, we get: 
 ```
@@ -80,7 +80,7 @@ $ afl
 0x000007ed    3 141          sym.display_flag
 0x0000087a    3 122          sym.read_canary
 0x000008f4    9 273          sym.vuln
-'''
+```
 
 Now if we remember the security check, PIE is turned on, so our address will change each run, but if we stick with this and run our script a few times, we should be able to land a hit and jump to the right spot. 
 
