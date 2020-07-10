@@ -45,7 +45,7 @@ Segmentation fault (core dumped)
 So The program takes two inputs and seems to segfault if it doesn't get exactly what it wants. We could break open a debugger and look at it, but why overburden ourselves if we are given source code. 
 
 In the source code we can see:
-```
+```C
 #define GPS_ACCURACY 1337
 
 typedef void (fn_t)(void);
@@ -89,3 +89,14 @@ Since when we run this code we are given the address of a variable that is on th
 ### The exploit
 
 I have a python script "solution.py" that connects to the remote server, sets up a payload with 3000 NOPs and some shellcode, reads in the what the socket is printing until we get our current location, we add 1000 to that location to hopefully get us onto our sled, we send our payload into the buffer, we then ask to start at our guessed location, and if everything works the way it should you will have an interactive terminal now. 
+
+If we run the code we get:
+```
+$ python solution.py
+[+] Opening connection to 2018shell.picoctf.com on port 24627: Done
+[*] Switching to interactive mode
+What's your plan?
+> Where do we start?
+> $ cat flag.txt
+picoCTF{theflag}
+```
