@@ -45,7 +45,7 @@ Input> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 So now we see that they have implemented their own canary somehow. Now let's look at their code to see if we can find any buffers, their sizes, and any other useful information. 
 
-```
+```C
 #define BUF_SIZE 32
 #define KEY_LEN 4
 ...
