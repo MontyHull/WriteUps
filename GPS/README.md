@@ -5,7 +5,7 @@ You got really lost in the wilderness, with nothing but your trusty gps. Can you
 ## Tools Used 
 
 - pwntools
-- radare2 
+- shellstorm (http://shell-storm.org/shellcode/files/shellcode-806.php)
 
 ### Initial exploration
 
