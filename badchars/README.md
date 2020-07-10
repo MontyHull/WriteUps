@@ -9,10 +9,11 @@ An arbitrary write challenge with a twist; certain input characters get mangled 
 - pwntools
 - ropper 
 
-### Exploitable piece of code
+### Initial exploration
 
-Unlike the picoCTFs, ROP Emporium(ROPE) does not give you the source code for their challenges. However, we do know that we are going to need to ROP around the program and find a way to either pop a shell so that we can read the flag, or find a way to get the program to print the flag for us. We should always start out with checking the security on the file and then running it to see what kind of output we get. So checksec yields: 
+Unlike the picoCTFs, ROP Emporium(ROPE) does not give you the source code for their challenges. However, we do know that we are going to need to ROP around the program and find a way to either pop a shell so that we can read the flag, or find a way to get the program to print the flag for us. We should always start out with checking the security on the file and then running it to see what kind of output we get. 
 
+So checksec yields: 
 ```
 Arch:     amd64-64-little
 RELRO:    Partial RELRO
@@ -24,7 +25,6 @@ PIE:      No PIE (0x400000)
 So we know that we can's just spray shellcode onto the stack since NX is enabled, we don't have to worry about getting around a canary if we can overflow a buffer, we should be able to find a place in memory to write to if we need to since we only have partial RELRO, and our addresses shouldn't move around on us since PIE is turned off. 
 
 Next if we run the program we get:
-
 ```
 badchars by ROP Emporium
 64bits
@@ -34,6 +34,22 @@ badchars are: b i c / <space> f n s
 
 Exiting
 ```
+
+So it looks like we can't write "b i c / <space> f n s" in our input, which will make /bin/sh, /bin/cat, or flag pretty hard to input. We will either have to find what we need inside our code or think of a different way to exploit the code. 
+
+The only thing left to do is to see if we can crash the program with too much input:
+```
+Monty$ python -c "print('A'*1000)" | ./badchars 
+badchars by ROP Emporium
+64bits
+
+badchars are: b i c / <space> f n s
+> Segmentation fault (core dumped)
+```
+
+So it seems we will be able work with the stack to ROP around easily. Next we will break open the binary to see where we can go. 
+
+### Exploitable piece of code
 
 ### How are we going to exploit it?
 
