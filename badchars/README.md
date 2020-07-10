@@ -143,4 +143,4 @@ So with these gadgets and our initial 40 bytes that we need to overwrite the ret
 
 ### The exploit
 
-I have written a python script "solve.py" that will xor "/bin/sh", add a null byte to the end, create all of our needed gadgets, combine them into the necessary payload, then send them to the running process and create an interactive shell. Enjoy the completed challenge and read that flag.txt
+I have written a python script "solve.py" that will xor "/bin/sh", add a null byte to the end, create all of our needed gadgets, combine them into the necessary payload, then send them to the running process and create an interactive shell and win. 
