@@ -47,9 +47,28 @@ badchars are: b i c / <space> f n s
 > Segmentation fault (core dumped)
 ```
 
-So it seems we will be able work with the stack to ROP around easily. Next we will break open the binary to see where we can go. 
+So it seems we will be able to work with the stack to ROP around easily. Next we will break open the binary to see where we can go. 
 
 ### Exploitable piece of code
+
+I like to start exploring the code by listing all of the functions that radare2 can find. 
+
+The commands and useful output that is yielded is:
+```
+$ r2 badchars
+$ aaaa
+$ aaf
+$ afl
+0x004008f5    4 234          sym.pwnme
+0x004009f0    7 80           sym.nstrlen
+0x00400a40    9 158          sym.checkBadchars
+0x004009df    1 17           sym.usefulFunction
+0x00400b30    1 4            loc.usefulGadgets
+0x004006f0    1 6            sym.imp.system
+```
+
+if we set r2 to main and follow some of these functions we see that main calls pwnme, pwnme calls fgets which is where we will enter our input, afterwards nstrlen checks that our input is less than 0x200 bytes long, returns to pwnme, pwnme calls checkBadchars,  it checks to ensure you haven't set added any bad characters, returns to pwnme, and pwnme tries to return to main, but if we do our job right we should be able to start our ROPchain here. 
+
 
 ### How are we going to exploit it?
 
